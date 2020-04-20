@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tfg/view/alumno/alumno_page.dart';
+import 'package:tfg/view/alumno/lista_alumnos_page.dart';
+import 'package:tfg/view/centro/centro_page.dart';
+import 'package:tfg/view/clase/clase_list_page.dart';
+import 'package:tfg/view/clase/clase_page.dart';
+import 'package:tfg/view/empleado/empleado_list_page.dart';
 import 'package:tfg/view/empleado/empleado_page.dart';
 
 void main() => runApp(MyApp());
@@ -15,7 +20,7 @@ class MyApp extends StatelessWidget{
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: AlumnoPage(),
+      home: EmpleadoPage(),
     );
   }
 
