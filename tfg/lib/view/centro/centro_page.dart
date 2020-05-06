@@ -1,25 +1,64 @@
 import 'package:flutter/material.dart';
+import 'package:tfg/controller/centro/centro_controller.dart';
+import 'package:tfg/model/centro/centro.dart';
 import 'package:tfg/view/utils/page_utils.dart';
 
-class CentroPage extends StatelessWidget {
+class CentroPage extends StatefulWidget {
+  final int centroId;
+
+  CentroPage({this.centroId});
+
+  @override
+  _CentroPageState createState() => _CentroPageState(centroId: centroId);
+}
+
+class _CentroPageState extends State<CentroPage> {
+  final name = 'Información Centro';
+  final int centroId;
   final utils = PageUtils();
+  final centroController = CentroController();
+  Future<Centro> centroFuture;
+
+  _CentroPageState({this.centroId});
+
+  @override
+  void initState() {
+    super.initState();
+    centroFuture = centroController.getCentro(centroId);
+  }
+
+  @override
+  dispose() {
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: utils.appBar(name: 'Centro 1'),
-      body: utils.gradientBackground(
-        content: ListView(
-          children: <Widget>[
-            _cardCentro(),
-            _cardResponsable(),
-          ],
-        ),
-      ),
+    return FutureBuilder<Centro>(
+      future: centroFuture,
+      builder: (context, centro) {
+        if (centro.hasData) {
+          return Scaffold(
+            appBar: utils.appBar(name: name),
+            body: utils.gradientBackground(
+              content: ListView(
+                children: <Widget>[
+                  _cardCentro(centro: centro.data),
+                  _cardResponsable(centro: centro.data),
+                ],
+              ),
+            ),
+          );
+        } else if (centro.hasError) {
+          return Text("${centro.error}");
+        }
+
+        return utils.progressPage(name);
+      },
     );
   }
 
-  Widget _cardCentro() {
+  Widget _cardCentro({Centro centro}) {
     return utils.container(
       content: <Widget>[
         Text(
@@ -37,7 +76,7 @@ class CentroPage extends StatelessWidget {
               style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
             ),
             Text(
-              'Colegio1',
+              '${centro.nombre}',
               style: TextStyle(fontSize: 18.0),
             ),
           ],
@@ -51,7 +90,7 @@ class CentroPage extends StatelessWidget {
               style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
             ),
             Text(
-              'Calle 1, s/n',
+              '${centro.direccion}',
               style: TextStyle(fontSize: 18.0),
             ),
           ],
@@ -64,7 +103,8 @@ class CentroPage extends StatelessWidget {
               'Hora de Inicio: ',
               style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
             ),
-            Text('16:00', style: TextStyle(fontSize: 18.0)),
+            Text('${centro.horaMaximaInicio}',
+                style: TextStyle(fontSize: 18.0)),
           ],
         ),
         Divider(),
@@ -76,7 +116,7 @@ class CentroPage extends StatelessWidget {
               style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
             ),
             Text(
-              '19:00',
+              '${centro.horaMaximaFin}',
               style: TextStyle(fontSize: 18.0),
             ),
           ],
@@ -85,7 +125,7 @@ class CentroPage extends StatelessWidget {
     );
   }
 
-  Widget _cardResponsable() {
+  Widget _cardResponsable({Centro centro}) {
     return utils.container(
       content: <Widget>[
         Text(
@@ -103,7 +143,7 @@ class CentroPage extends StatelessWidget {
               style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
             ),
             Text(
-              'Nombre1',
+              '${centro.responsable.nombre}',
               style: TextStyle(fontSize: 18.0),
             ),
           ],
@@ -117,7 +157,7 @@ class CentroPage extends StatelessWidget {
               style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
             ),
             Text(
-              'Apellido1 Apellido2',
+              '${centro.responsable.apellidos}',
               style: TextStyle(fontSize: 18.0),
             ),
           ],
@@ -130,7 +170,8 @@ class CentroPage extends StatelessWidget {
               'Cargo: ',
               style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
             ),
-            Text('Responsable Actividades', style: TextStyle(fontSize: 18.0)),
+            Text('${centro.responsable.cargo}',
+                style: TextStyle(fontSize: 18.0)),
           ],
         ),
         Divider(),
@@ -142,7 +183,7 @@ class CentroPage extends StatelessWidget {
               style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
             ),
             Text(
-              'correo@correo.es',
+              '${centro.responsable.correo}',
               style: TextStyle(fontSize: 18.0),
             ),
           ],
@@ -156,7 +197,7 @@ class CentroPage extends StatelessWidget {
               style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
             ),
             Text(
-              '651666666',
+              '${centro.responsable.telefono}',
               style: TextStyle(fontSize: 18.0),
             ),
           ],

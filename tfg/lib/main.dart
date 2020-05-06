@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:tfg/view/alumno/alumno_page.dart';
-import 'package:tfg/view/alumno/lista_alumnos_page.dart';
-import 'package:tfg/view/centro/centro_page.dart';
-import 'package:tfg/view/clase/clase_list_page.dart';
-import 'package:tfg/view/clase/clase_page.dart';
-import 'package:tfg/view/empleado/empleado_list_page.dart';
-import 'package:tfg/view/empleado/empleado_page.dart';
+import 'package:tfg/view/index/index_page.dart';
+import 'package:tfg/view/index/login_page.dart';
 
 void main() => runApp(MyApp());
 
@@ -16,11 +11,12 @@ class MyApp extends StatelessWidget{
     _portraitModeOnly();
 
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Shoki',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: EmpleadoPage(),
+      home: LoginPage(),
+      debugShowCheckedModeBanner: false,
     );
   }
 

@@ -9,4 +9,13 @@ class Pago{
 
   Pago({this.id, this.alumno, this.fecha, this.mesPagado, this.cantidad});
 
+  factory Pago.fromJson(Map<String, dynamic> json){
+    return Pago(
+      id: json['id'],
+      alumno: Alumno.fromJson(json['alumno']),
+      fecha: DateTime.parse(json['fecha']),
+      mesPagado: DateTime.parse(json['mesPagado']),
+      cantidad: json['cantidad']
+    );
+  }
 }

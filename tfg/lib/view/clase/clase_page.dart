@@ -1,24 +1,65 @@
 import 'package:flutter/material.dart';
+import 'package:tfg/controller/clase/clase_controller.dart';
+import 'package:tfg/model/clase/clase.dart';
+import 'package:tfg/view/clase/anotar_lista_alumnos_clase_page.dart';
+import 'package:tfg/view/clase/lista_alumnos_clase_page.dart';
 import 'package:tfg/view/utils/page_utils.dart';
 
-class ClasePage extends StatelessWidget {
+class ClasePage extends StatefulWidget {
+  final int idClase;
+
+  ClasePage({this.idClase});
+
+  @override
+  _ClasePageState createState() => _ClasePageState(idClase: idClase);
+}
+
+class _ClasePageState extends State<ClasePage> {
+  final name = 'Información Clase';
+  final int idClase;
   PageUtils utils = PageUtils();
+  final claseController = ClaseController();
+  Future<Clase> claseFuture;
+
+  _ClasePageState({this.idClase});
+
+  @override
+  void initState() {
+    super.initState();
+    claseFuture = claseController.getClase(idClase);
+  }
+
+  @override
+  dispose() {
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: utils.appBar(name: 'Clase 1 - Centro 1'),
-      body: utils.gradientBackground(
-          content: ListView(
-        children: <Widget>[
-          _cardClase(),
-        ],
-      )),
-      floatingActionButton: _buttons(),
+    return FutureBuilder(
+      future: claseFuture,
+      builder: (context, clase) {
+        if (clase.hasData) {
+          return Scaffold(
+            appBar: utils.appBar(name: name),
+            body: utils.gradientBackground(
+                content: ListView(
+              children: <Widget>[
+                _cardClase(clase: clase.data),
+              ],
+            )),
+            floatingActionButton: _buttons(context, clase.data.id),
+          );
+        } else if (clase.hasError) {
+          return Text("${clase.error}");
+        }
+
+        return utils.progressPage(name);
+      },
     );
   }
 
-  Widget _cardClase() {
+  Widget _cardClase({Clase clase}) {
     return utils.container(
       content: <Widget>[
         Text(
@@ -36,7 +77,7 @@ class ClasePage extends StatelessWidget {
               style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
             ),
             Text(
-              'Clase 1 - Centro 1',
+              '${clase.id} - ${clase.centro.nombre}',
               style: TextStyle(fontSize: 18.0),
             ),
           ],
@@ -50,7 +91,7 @@ class ClasePage extends StatelessWidget {
               style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
             ),
             Text(
-              '25 €',
+              '${clase.precio} €',
               style: TextStyle(fontSize: 18.0),
             ),
           ],
@@ -63,7 +104,7 @@ class ClasePage extends StatelessWidget {
               'Hora de Inicio: ',
               style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
             ),
-            Text('16:00', style: TextStyle(fontSize: 18.0)),
+            Text('${clase.horaInicio}', style: TextStyle(fontSize: 18.0)),
           ],
         ),
         Divider(),
@@ -75,7 +116,7 @@ class ClasePage extends StatelessWidget {
               style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
             ),
             Text(
-              '17:00',
+              '${clase.horaFin}',
               style: TextStyle(fontSize: 18.0),
             ),
           ],
@@ -89,7 +130,7 @@ class ClasePage extends StatelessWidget {
               style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
             ),
             Text(
-              '4 años',
+              '${clase.edadMinima} años',
               style: TextStyle(fontSize: 18.0),
             ),
           ],
@@ -103,7 +144,7 @@ class ClasePage extends StatelessWidget {
               style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
             ),
             Text(
-              '10 años',
+              '${clase.edadMaxima} años',
               style: TextStyle(fontSize: 18.0),
             ),
           ],
@@ -116,7 +157,7 @@ class ClasePage extends StatelessWidget {
               'Centro: ',
               style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
             ),
-            Text('Centro 1', style: TextStyle(fontSize: 18.0)),
+            Text('${clase.centro.nombre}', style: TextStyle(fontSize: 18.0)),
           ],
         ),
         Divider(),
@@ -128,7 +169,7 @@ class ClasePage extends StatelessWidget {
               style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
             ),
             Text(
-              'Nombre1 Apellido1 Apellido2',
+              '${clase.profesor.nombre} ${clase.profesor.apellidos}',
               style: TextStyle(fontSize: 18.0),
             ),
           ],
@@ -137,13 +178,21 @@ class ClasePage extends StatelessWidget {
     );
   }
 
-  Widget _buttons() {
+  Widget _buttons(BuildContext context, int idClase) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: <Widget>[
         Expanded(child: SizedBox()),
         FloatingActionButton(
-          onPressed: () {},
+          heroTag: "btn1",
+          onPressed: () {
+            final route = MaterialPageRoute(
+                builder: (context) => ListaAlumnosClasePage(
+                      idClase: idClase,
+                    ));
+
+            Navigator.push(context, route);
+          },
           child: Icon(Icons.list),
           backgroundColor: Colors.lightBlueAccent,
         ),
@@ -151,7 +200,15 @@ class ClasePage extends StatelessWidget {
           width: 5.0,
         ),
         FloatingActionButton(
-          onPressed: () {},
+          heroTag: "btn2",
+          onPressed: () {
+            final route = MaterialPageRoute(
+                builder: (context) => PasarListaAlumnosClasePage(
+                      idClase: idClase,
+                    ));
+
+            Navigator.push(context, route);
+          },
           child: Icon(Icons.playlist_add_check),
           backgroundColor: Colors.lightBlueAccent,
         ),

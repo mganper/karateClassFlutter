@@ -8,4 +8,11 @@ class AlumnoClase{
 
   AlumnoClase({this.id, this.alumno, this.clase});
 
+  factory AlumnoClase.fromJson(Map<String, dynamic> json){
+    return AlumnoClase(
+      id: json['id'],
+      alumno: Alumno.fromJson(json['alumno']),
+      clase: Clase.fromJson(json['clase'])
+    );
+  }
 }

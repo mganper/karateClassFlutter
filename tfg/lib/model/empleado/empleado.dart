@@ -1,6 +1,6 @@
 import 'package:tfg/model/common/cinturon.dart';
 
-class Empleado{
+class Empleado {
   int id;
   String dni;
   String nombre;
@@ -9,13 +9,33 @@ class Empleado{
   DateTime fechaNacimiento;
   String direccion;
   String telefono;
-  double sueldo;
   Cinturon cinturon;
   int gradoInstructor;
-  String activo;
 
-  Empleado({this.id, this.dni, this.nombre, this.apellidos, this.sexo,
-      this.fechaNacimiento, this.direccion, this.telefono, this.sueldo,
-      this.cinturon, this.gradoInstructor, this.activo});
+  Empleado(
+      {this.id,
+      this.dni,
+      this.nombre,
+      this.apellidos,
+      this.sexo,
+      this.fechaNacimiento,
+      this.direccion,
+      this.telefono,
+      this.cinturon,
+      this.gradoInstructor});
 
+  factory Empleado.fromJson(Map<String, dynamic> json) {
+    return Empleado(
+      id: json['id'],
+      dni: json['dni'],
+      nombre: json['nombre'],
+      apellidos: json['apellidos'],
+      sexo: json['sexo'],
+      fechaNacimiento: DateTime.parse(json['fechaNacimiento']),
+      direccion: json['direccion'],
+      telefono: json['telefono'],
+      cinturon: Cinturon.fromJson(json['cinturon']),
+      gradoInstructor: json['gradoInstructor'],
+    );
+  }
 }

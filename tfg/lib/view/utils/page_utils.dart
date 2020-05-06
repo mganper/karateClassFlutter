@@ -10,10 +10,10 @@ class PageUtils {
   );
 
   EdgeInsets cardPadding = EdgeInsets.only(
-      top: 10.0,
-      left: 10.0,
-      bottom: 10.0,
-      right: 10.0,
+    top: 10.0,
+    left: 10.0,
+    bottom: 10.0,
+    right: 10.0,
   );
 
   BoxDecoration boxDecoration = BoxDecoration(
@@ -29,11 +29,17 @@ class PageUtils {
     ],
   );
 
-  Widget appBar({String name}) {
+  Widget appBar({String name, bool hasLogout}) {
     return GradientAppBar(
       title: Text(name),
       backgroundColorStart: Colors.lightBlueAccent,
       backgroundColorEnd: Colors.lightBlueAccent,
+      actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.share),
+            onPressed: () {},
+          )
+        ],
     );
   }
 
@@ -52,7 +58,7 @@ class PageUtils {
     );
   }
 
-  Widget container({List<Widget> content}){
+  Widget container({List<Widget> content}) {
     return Container(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -63,4 +69,21 @@ class PageUtils {
       decoration: boxDecoration,
     );
   }
+
+  Widget progressPage(String name) {
+    return Scaffold(
+      appBar: appBar(name: name),
+      body: gradientBackground(
+        content: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              CircularProgressIndicator()
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
 }

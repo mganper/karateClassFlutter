@@ -7,4 +7,11 @@ class Faltas{
 
   Faltas({this.id, this.fecha, this.alumnoClase});
 
+  factory Faltas.fromJson(Map<String, dynamic> json){
+    return Faltas(
+      id: json['id'],
+      fecha: json['fecha']
+    );
+  }
+
 }

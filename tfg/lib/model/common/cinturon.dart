@@ -1,7 +1,14 @@
 class Cinturon{
   int id;
-  String nomnbre;
+  String nombre;
 
-  Cinturon({this.id, this.nomnbre});
+  Cinturon({this.id, this.nombre});
+
+  factory Cinturon.fromJson(Map<String, dynamic> json){
+    return Cinturon(
+      id: json['id'],
+      nombre: json['nomnbre']
+    );
+  }
 
 }

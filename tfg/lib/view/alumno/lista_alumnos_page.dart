@@ -1,105 +1,85 @@
 import 'package:flutter/material.dart';
-import 'package:gradient_app_bar/gradient_app_bar.dart';
+import 'package:tfg/controller/alumno/alumno_controller.dart';
+import 'package:tfg/model/alumno/alumno.dart';
+import 'package:tfg/view/alumno/alumno_page.dart';
 import 'package:tfg/view/utils/page_utils.dart';
 
-class ListaAlumnosPage extends StatelessWidget {
+class ListaAlumnosPage extends StatefulWidget {
+  @override
+  createState() => _AlumnosListState();
+}
+
+class _AlumnosListState extends State {
   final utils = PageUtils();
+  final AlumnoController alumnoController = AlumnoController();
+  Future<List<Alumno>> alumnoListFuture;
+  final name = 'Lista Alumnos';
+
+  @override
+  void initState() {
+    super.initState();
+    alumnoListFuture = alumnoController.getListaAlumnos();
+  }
+
+  @override
+  dispose() {
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: utils.appBar(name: 'Lista Alumnos'),
-      body: utils.gradientBackground(
-        content: ListView(
-          children: _list(),
-        ),
-      ),
-    );
-  }
+    return FutureBuilder(
+      future: alumnoListFuture,
+      builder: (context, alumnoList) {
+        if (alumnoList.hasData) {
+          return Scaffold(
+            appBar: utils.appBar(name: name),
+            body: utils.gradientBackground(
+              content: ListView.builder(
+                itemCount: alumnoList.data.length,
+                itemBuilder: (context, index) {
+                  return Card(
+                    child: ListTile(
+                      trailing: Icon(
+                        Icons.keyboard_arrow_right,
+                        color: Colors.blue,
+                      ),
+                      title: Text(
+                          '${alumnoList.data[index].nombre} ${alumnoList.data[index].apellidos}'),
+                      subtitle: Text(_clase(alumno: alumnoList.data[index])),
+                      onTap: () {
+                        final route = MaterialPageRoute(
+                            builder: (context) => AlumnoPage(
+                                  alumnoId: alumnoList.data[index].id,
+                                ));
 
-  Widget _setGradientBar(){
-    return GradientAppBar(
-      title: Text('Lista Empleados'),
-      backgroundColorStart: Colors.blue,
-      backgroundColorEnd: Colors.white,
-    );
-  }
-
-  Widget _setContent() {
-    return Center(
-      child: Container(
-        decoration: BoxDecoration(
-            gradient: LinearGradient(
-                begin: Alignment.topRight,
-                end: Alignment.bottomLeft,
-                colors: [Colors.white, Colors.lightBlueAccent])),
-        child: Center(
-          child: ListView(
-            children: _list(),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _setBottomNavigationbar(){
-    return BottomNavigationBar(
-      fixedColor: Colors.blue,
-      backgroundColor: Colors.blue,
-      items: <BottomNavigationBarItem>[
-        BottomNavigationBarItem(
-          icon: Icon(Icons.face, color: Colors.blueAccent),
-          title: Text(
-            "Alumnos",
-            style: TextStyle(
-              color: Colors.blueAccent,
+                        Navigator.push(context, route);
+                      },
+                    ),
+                  );
+                },
+              ),
             ),
-          ),
-        ),
-        BottomNavigationBarItem(
-            icon: Icon(Icons.fitness_center, color: Colors.blueAccent),
-            title: Text(
-              "Centros",
-              style: TextStyle(
-                color: Colors.blueAccent,
-              ),
-            )),
-        BottomNavigationBarItem(
-            icon: Icon(Icons.class_, color: Colors.blueAccent),
-            title: Text(
-              "Clases",
-              style: TextStyle(
-                color: Colors.blueAccent,
-              ),
-            )),
-        BottomNavigationBarItem(
-            icon: Icon(Icons.assignment_ind, color: Colors.blueAccent),
-            title: Text(
-              "profesoress",
-              style: TextStyle(
-                color: Colors.blueAccent,
-              ),
-            )),
-      ],
+          );
+        } else if (alumnoList.hasError) {
+          return Text("${alumnoList.error}");
+        }
+
+        return utils.progressPage(name);
+      },
     );
   }
 
-  List<Widget> _list() {
-    List<Widget> alumnosList = [];
-
-    for (int i = 0; i < 20; i++) {
-      final tile = Card(
-          child: ListTile(
-            trailing: Icon(Icons.arrow_forward),
-            title: Text("Nombre$i Apellido$i Apellido$i"),
-            subtitle: Text("Clase 1 - Centro 1"),
-            onTap: () {},
-          )
-      );
-
-      alumnosList.add(tile);
+  String _clase({Alumno alumno}){
+    if(alumno.clase == null){
+      return 'No asignado';
+    } else {
+      return '${alumno.clase.id} - ${alumno.clase.centro.nombre}';
     }
+  }
 
-    return alumnosList;
+  @override
+  State<StatefulWidget> createState() {
+    return null;
   }
 }
