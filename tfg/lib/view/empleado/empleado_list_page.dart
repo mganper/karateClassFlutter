@@ -64,7 +64,7 @@ class _ListaEmpleadosPageState extends State<ListaEmpleadosPage> {
             ),
           );
         } else if (empleadoList.hasError) {
-          return Text("${empleadoList.error}");
+          return utils.errorPage(name);
         }
 
         return utils.progressPage(name);

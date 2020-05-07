@@ -53,7 +53,7 @@ class _EmpleadoPageState extends State<EmpleadoPage> {
             ),
           );
         } else if (empleado.hasError) {
-          return Text("${empleado.error}");
+          return utils.errorPage(name);
         }
 
         return utils.progressPage(name);

@@ -51,7 +51,9 @@ class _PasarListaAlumnosClaseState extends State<PasarListaAlumnosClasePage> {
             ),
             floatingActionButton: _buttons(context),
           );
-        } else if (asistenciaList.hasError) {}
+        } else if (asistenciaList.hasError) {
+          return utils.errorPage(name);
+        }
 
         return utils.progressPage(name);
       },

@@ -64,7 +64,7 @@ class _ListaClasesPageState extends State<ListaClasesPage> {
             ),
           );
         } else if (claseList.hasError) {
-          return Text("${claseList.error}");
+          return utils.errorPage(name);
         }
 
         return utils.progressPage(name);

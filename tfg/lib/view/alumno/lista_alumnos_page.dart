@@ -62,7 +62,7 @@ class _AlumnosListState extends State {
             ),
           );
         } else if (alumnoList.hasError) {
-          return Text("${alumnoList.error}");
+          return utils.errorPage(name);
         }
 
         return utils.progressPage(name);

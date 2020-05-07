@@ -12,9 +12,22 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final _controllerUser = TextEditingController();
   final _controllerPassword = TextEditingController();
-  LoginController loginController = LoginController();
+  final LoginController loginController = LoginController();
   var _isChargin = 0;
   var _isEnabled = true;
+
+  @override
+  void initState() {
+    loginController.leerUsuario().then((isRead){
+      if (isRead) {
+        final route = MaterialPageRoute(builder: (context) => IndexPage());
+
+        Navigator.pushReplacement(context, route);
+      } else {
+        super.initState();
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -131,20 +144,18 @@ class _LoginPageState extends State<LoginPage> {
         .login(
             username: _controllerUser.text, password: _controllerPassword.text)
         .then((resp) {
-          if(resp){
-//            final route = MaterialPageRoute(
-//                builder: (context) => IndexPage());
-//
-//            Navigator.pushReplacement(context, route);
-          } else {
-            setState(() {
-              _isChargin = 0;
-              _isEnabled = true;
-              _mostrarAlert(context);
-            });
-          }
-    });
+      if (resp) {
+        final route = MaterialPageRoute(builder: (context) => IndexPage());
 
+        Navigator.pushReplacement(context, route);
+      } else {
+        setState(() {
+          _isChargin = 0;
+          _isEnabled = true;
+          _mostrarAlert(context);
+        });
+      }
+    });
   }
 
   Widget setUpButtonChild() {
@@ -185,14 +196,14 @@ class _LoginPageState extends State<LoginPage> {
       builder: (context) {
         return AlertDialog(
           shape:
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
           title: Text('Confirmar pago'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Text('Contraseña o Usuario incorrecto.'),
-              ],
+            ],
           ),
           actions: <Widget>[
             FlatButton(

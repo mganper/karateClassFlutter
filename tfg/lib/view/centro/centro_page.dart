@@ -50,7 +50,7 @@ class _CentroPageState extends State<CentroPage> {
             ),
           );
         } else if (centro.hasError) {
-          return Text("${centro.error}");
+          return utils.errorPage(name);
         }
 
         return utils.progressPage(name);

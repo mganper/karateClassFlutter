@@ -1,18 +1,16 @@
 import 'dart:convert';
 
 import 'package:http/http.dart';
-import 'package:tfg/controller/father/api.dart';
+import 'package:tfg/controller/common/api.dart';
 import 'package:tfg/model/empleado/empleado.dart';
 
 class EmpleadoController extends Api {
-  String username = '28554690Y';
-  String password = '1234';
   String basicAuth;
   String url;
 
   EmpleadoController() {
     this.basicAuth =
-        'Basic ' + base64Encode(utf8.encode('$username:$password'));
+        'Basic ' + base64Encode(utf8.encode('${Api.usuario}:${Api.password}'));
     this.url = super.url + '/profesores';
   }
 

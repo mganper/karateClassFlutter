@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart';
-import 'package:tfg/controller/father/api.dart';
+import 'package:tfg/controller/common/api.dart';
 import 'package:tfg/model/alumno/alumno.dart';
 
 class AlumnoController extends Api {
@@ -12,7 +12,7 @@ class AlumnoController extends Api {
 
   AlumnoController() {
     this.basicAuth =
-        'Basic ' + base64Encode(utf8.encode('$username:$password'));
+        'Basic ' + base64Encode(utf8.encode('${Api.usuario}:${Api.password}'));
     this.url = '${super.url}/alumnos';
   }
 

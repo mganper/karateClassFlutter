@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
+import 'package:tfg/controller/login/login_controller.dart';
+import 'package:tfg/view/index/login_page.dart';
 
 class PageUtils {
   EdgeInsets cardMargin = EdgeInsets.only(
@@ -29,17 +31,20 @@ class PageUtils {
     ],
   );
 
-  Widget appBar({String name, bool hasLogout}) {
+  Widget appBar({String name, bool hasActions, BuildContext context}) {
     return GradientAppBar(
       title: Text(name),
       backgroundColorStart: Colors.lightBlueAccent,
       backgroundColorEnd: Colors.lightBlueAccent,
-      actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.share),
-            onPressed: () {},
-          )
-        ],
+    );
+  }
+
+  Widget appBarAction({String name, BuildContext context}) {
+    return GradientAppBar(
+      title: Text(name),
+      backgroundColorStart: Colors.lightBlueAccent,
+      backgroundColorEnd: Colors.lightBlueAccent,
+      actions: _setActions(context: context),
     );
   }
 
@@ -77,8 +82,26 @@ class PageUtils {
         content: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[CircularProgressIndicator()],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget errorPage(String name) {
+    return Scaffold(
+      appBar: appBar(name: name),
+      body: gradientBackground(
+        content: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              CircularProgressIndicator()
+              container(
+                content: <Widget>[
+                  Text('Fallo al contactar con el servidor.'),
+                ],
+              ),
             ],
           ),
         ),
@@ -86,4 +109,20 @@ class PageUtils {
     );
   }
 
+  List<Widget> _setActions({BuildContext context}) {
+    return <Widget>[
+      IconButton(
+        icon: Icon(Icons.exit_to_app),
+        onPressed: () {
+          final route = MaterialPageRoute(builder: (context) => LoginPage());
+          var api = LoginController();
+
+          api.eliminarusuario();
+
+          Navigator.pushAndRemoveUntil(
+              context, route, (Route<dynamic> route) => false);
+        },
+      )
+    ];
+  }
 }

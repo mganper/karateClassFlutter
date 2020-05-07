@@ -51,7 +51,7 @@ class _ClasePageState extends State<ClasePage> {
             floatingActionButton: _buttons(context, clase.data.id),
           );
         } else if (clase.hasError) {
-          return Text("${clase.error}");
+          return utils.errorPage(name);
         }
 
         return utils.progressPage(name);

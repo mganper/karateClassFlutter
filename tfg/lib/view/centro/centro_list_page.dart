@@ -63,7 +63,7 @@ class _ListaCentrosPageState extends State<ListaCentrosPage> {
           );
         }
         else if(centroList.hasError){
-          return Text("${centroList.error}");
+          return utils.errorPage(name);
         }
 
         return utils.progressPage(name);
